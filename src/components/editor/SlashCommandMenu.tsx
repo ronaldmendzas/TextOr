@@ -33,6 +33,8 @@ interface SlashCommandMenuProps {
 
 export function SlashCommandMenu({ editor, range, onClose }: SlashCommandMenuProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [query, _setQuery] = useState('');
 
   const commands: CommandItem[] = [
     {

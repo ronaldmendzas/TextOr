@@ -1,52 +1,53 @@
 'use client';
 
-import { NodeViewWrapper } from '@tiptap/react';
+import { NodeViewWrapper, type NodeViewProps } from '@tiptap/react';
 import { useState } from 'react';
 import { Plus, Trash2, ArrowUp, ArrowDown } from 'lucide-react';
 
-export function DynamicTableComponent({
-  node,
-  updateAttributes,
-}: {
-  node: { attrs: { headers: string[]; rows: string[][] } };
-  updateAttributes: (attrs: { headers?: string[]; rows?: string[][] }) => void;
-}) {
+interface TableAttrs {
+  headers: string[];
+  rows: string[][];
+}
+
+export function DynamicTableComponent({ node, updateAttributes }: NodeViewProps) {
   const [sortColumn, setSortColumn] = useState<number | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
+  const attrs = node.attrs as TableAttrs;
+
   const addColumn = () => {
-    const newHeaders = [...node.attrs.headers, `Column ${node.attrs.headers.length + 1}`];
-    const newRows = node.attrs.rows.map(row => [...row, '']);
+    const newHeaders = [...attrs.headers, `Column ${attrs.headers.length + 1}`];
+    const newRows = attrs.rows.map((row: string[]) => [...row, '']);
     updateAttributes({ headers: newHeaders, rows: newRows });
   };
 
   const addRow = () => {
-    const newRow = Array(node.attrs.headers.length).fill('');
-    updateAttributes({ rows: [...node.attrs.rows, newRow] });
+    const newRow = Array(attrs.headers.length).fill('');
+    updateAttributes({ rows: [...attrs.rows, newRow] });
   };
 
   const removeColumn = (colIndex: number) => {
-    if (node.attrs.headers.length <= 1) return;
-    const newHeaders = node.attrs.headers.filter((_, i) => i !== colIndex);
-    const newRows = node.attrs.rows.map(row => row.filter((_, i) => i !== colIndex));
+    if (attrs.headers.length <= 1) return;
+    const newHeaders = attrs.headers.filter((_: string, i: number) => i !== colIndex);
+    const newRows = attrs.rows.map((row: string[]) => row.filter((_: string, i: number) => i !== colIndex));
     updateAttributes({ headers: newHeaders, rows: newRows });
   };
 
   const removeRow = (rowIndex: number) => {
-    if (node.attrs.rows.length <= 1) return;
-    const newRows = node.attrs.rows.filter((_, i) => i !== rowIndex);
+    if (attrs.rows.length <= 1) return;
+    const newRows = attrs.rows.filter((_: string[], i: number) => i !== rowIndex);
     updateAttributes({ rows: newRows });
   };
 
   const updateCell = (rowIndex: number, colIndex: number, value: string) => {
-    const newRows = node.attrs.rows.map((row, rIdx) =>
-      rIdx === rowIndex ? row.map((cell, cIdx) => (cIdx === colIndex ? value : cell)) : row
+    const newRows = attrs.rows.map((row: string[], rIdx: number) =>
+      rIdx === rowIndex ? row.map((cell: string, cIdx: number) => (cIdx === colIndex ? value : cell)) : row
     );
     updateAttributes({ rows: newRows });
   };
 
   const updateHeader = (colIndex: number, value: string) => {
-    const newHeaders = node.attrs.headers.map((header, idx) =>
+    const newHeaders = attrs.headers.map((header: string, idx: number) =>
       idx === colIndex ? value : header
     );
     updateAttributes({ headers: newHeaders });
@@ -57,7 +58,7 @@ export function DynamicTableComponent({
     setSortColumn(colIndex);
     setSortDirection(direction);
 
-    const sortedRows = [...node.attrs.rows].sort((a, b) => {
+    const sortedRows = [...attrs.rows].sort((a: string[], b: string[]) => {
       const aVal = a[colIndex];
       const bVal = b[colIndex];
       const comparison = aVal.localeCompare(bVal);
@@ -74,7 +75,7 @@ export function DynamicTableComponent({
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                {node.attrs.headers.map((header, colIndex) => (
+                {attrs.headers.map((header: string, colIndex: number) => (
                   <th
                     key={colIndex}
                     className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider relative group"
@@ -103,7 +104,7 @@ export function DynamicTableComponent({
                             <ArrowUp className="w-3 h-3 text-gray-400" />
                           )}
                         </button>
-                        {node.attrs.headers.length > 1 && (
+                        {attrs.headers.length > 1 && (
                           <button
                             onClick={() => removeColumn(colIndex)}
                             className="p-1 hover:bg-red-100 rounded opacity-0 group-hover:opacity-100 transition-opacity"
@@ -128,9 +129,9 @@ export function DynamicTableComponent({
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {node.attrs.rows.map((row, rowIndex) => (
+              {attrs.rows.map((row: string[], rowIndex: number) => (
                 <tr key={rowIndex} className="group">
-                  {row.map((cell, colIndex) => (
+                  {row.map((cell: string, colIndex: number) => (
                     <td key={colIndex} className="px-4 py-2">
                       <input
                         type="text"
@@ -142,7 +143,7 @@ export function DynamicTableComponent({
                     </td>
                   ))}
                   <td className="px-2 py-2 w-10">
-                    {node.attrs.rows.length > 1 && (
+                    {attrs.rows.length > 1 && (
                       <button
                         onClick={() => removeRow(rowIndex)}
                         className="p-1 hover:bg-red-100 rounded opacity-0 group-hover:opacity-100 transition-opacity"

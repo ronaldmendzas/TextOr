@@ -10,6 +10,7 @@ describe('Editor Store', () => {
     createdAt: new Date(),
     updatedAt: new Date(),
     version: 1,
+    userId: 'test-user',
   };
 
   it('should initialize with document', () => {

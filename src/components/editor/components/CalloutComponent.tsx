@@ -1,6 +1,6 @@
 'use client';
 
-import { NodeViewWrapper, NodeViewContent } from '@tiptap/react';
+import { NodeViewWrapper, NodeViewContent, type NodeViewProps } from '@tiptap/react';
 import { Info, AlertTriangle, AlertCircle, CheckCircle, Lightbulb } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -32,7 +32,7 @@ const calloutConfig = {
   },
 };
 
-export function CalloutComponent({ node }: { node: { attrs: { type: string; title: string } } }) {
+export function CalloutComponent({ node }: NodeViewProps) {
   const type = node.attrs.type as keyof typeof calloutConfig;
   const config = calloutConfig[type] || calloutConfig.info;
   const Icon = config.icon;

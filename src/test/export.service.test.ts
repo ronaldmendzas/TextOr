@@ -10,12 +10,13 @@ describe('Export Service', () => {
       {
         id: '1',
         type: 'paragraph',
-        content: [{ type: 'text', text: 'Hello World' }],
+        data: { text: 'Hello World' },
       },
     ],
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-02'),
     version: 1,
+    userId: 'test-user',
   };
 
   describe('exportDocument', () => {
@@ -27,7 +28,7 @@ describe('Export Service', () => {
       
       expect(result.success).toBe(true);
       expect(result.data).toBeDefined();
-      if (result.data) {
+      if (result.data && typeof result.data === 'string') {
         const parsed = JSON.parse(result.data);
         expect(parsed.id).toBe('test-doc');
       }

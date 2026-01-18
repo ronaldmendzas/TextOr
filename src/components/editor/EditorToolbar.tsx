@@ -16,7 +16,6 @@ import {
   Redo,
   Link as LinkIcon,
   Eye,
-  Download,
 } from 'lucide-react';
 import { useEditorStore } from '@/store/editor.store';
 import { cn } from '@/lib/utils';

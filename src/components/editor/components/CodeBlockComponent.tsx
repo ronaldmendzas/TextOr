@@ -1,17 +1,11 @@
 'use client';
 
-import { NodeViewWrapper, NodeViewContent } from '@tiptap/react';
+import { NodeViewWrapper, NodeViewContent, type NodeViewProps } from '@tiptap/react';
 import { useState } from 'react';
 import { Play, Copy, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export function CodeBlockComponent({
-  node,
-  updateAttributes,
-}: {
-  node: { attrs: { language: string; output: string } };
-  updateAttributes: (attrs: { output?: string }) => void;
-}) {
+export function CodeBlockComponent({ node, updateAttributes }: NodeViewProps) {
   const [isRunning, setIsRunning] = useState(false);
   const [copied, setCopied] = useState(false);
 

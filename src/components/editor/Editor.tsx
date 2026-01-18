@@ -1,6 +1,6 @@
 'use client';
 
-import { useEditor, EditorContent, type Editor as TiptapEditor } from '@tiptap/react';
+import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import Link from '@tiptap/extension-link';
@@ -22,7 +22,7 @@ export function Editor({
   onContentChange,
   placeholder = 'Start typing or press / for commands...',
 }: EditorProps) {
-  const { updateContent, focusMode } = useEditorStore();
+  const { focusMode } = useEditorStore();
 
   const editor = useEditor({
     extensions: [
@@ -62,9 +62,12 @@ export function Editor({
   });
 
   const debouncedContentChange = useCallback(
-    debounce((content: string) => {
-      onContentChange?.(content);
-    }, 500),
+    (content: string) => {
+      const debouncedFn = debounce(() => {
+        onContentChange?.(content);
+      }, 500);
+      debouncedFn();
+    },
     [onContentChange]
   );
 
