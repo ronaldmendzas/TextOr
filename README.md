@@ -1,0 +1,3 @@
+# TextOr
+
+Proyecto TextOr
