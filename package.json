@@ -2,7 +2,6 @@
   "name": "textor",
   "version": "0.0.1",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -44,6 +43,9 @@
     "@playwright/test": "^1.57.0",
     "@prisma/client": "^7.2.0",
     "@sentry/nextjs": "^10.34.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.1",
+    "@testing-library/user-event": "^14.6.1",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22",
     "@types/react": "^19",

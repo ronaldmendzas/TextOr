@@ -61,7 +61,7 @@ export const Variables = Extension.create<VariablesOptions>({
             return DecorationSet.create(doc, decorations);
           },
           
-          handleTextInput(view, from, to, text) {
+          handleTextInput(view, from, _to, text) {
             if (text !== ' ') return false;
 
             const { state, dispatch } = view;

@@ -8,7 +8,6 @@ import {
   Heading3,
   Code,
   Table,
-  Image,
   List,
   ListOrdered,
   Quote,
@@ -34,7 +33,6 @@ interface SlashCommandMenuProps {
 
 export function SlashCommandMenu({ editor, range, onClose }: SlashCommandMenuProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [query, setQuery] = useState('');
 
   const commands: CommandItem[] = [
     {

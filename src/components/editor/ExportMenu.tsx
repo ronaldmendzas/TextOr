@@ -103,6 +103,7 @@ export function ExportMenu({ document, isOpen, onClose }: ExportMenuProps) {
           <button
             onClick={onClose}
             className="p-1 hover:bg-gray-100 rounded transition-colors"
+            aria-label="Close export menu"
           >
             <X className="w-5 h-5" />
           </button>

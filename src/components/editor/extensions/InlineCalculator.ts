@@ -20,7 +20,7 @@ export const InlineCalculator = Extension.create<InlineCalculatorOptions>({
         key: new PluginKey('inlineCalculator'),
         
         props: {
-          handleTextInput(view, from, to, text) {
+          handleTextInput(view, from, _to, text) {
             if (text !== ' ') return false;
 
             const { state, dispatch } = view;

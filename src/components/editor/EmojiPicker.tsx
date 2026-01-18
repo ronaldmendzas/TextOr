@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { type Editor } from '@tiptap/react';
 import { Search } from 'lucide-react';
-import { emojiMap, emojiCategories } from '@/lib/emoji-data';
+import { emojiMap } from '@/lib/emoji-data';
 import { cn } from '@/lib/utils';
 
 interface EmojiPickerProps {

@@ -3,7 +3,6 @@
 import { NodeViewWrapper } from '@tiptap/react';
 import { useState } from 'react';
 import { Plus, Trash2, ArrowUp, ArrowDown } from 'lucide-react';
-import { cn } from '@/lib/utils';
 
 export function DynamicTableComponent({
   node,
@@ -86,6 +85,7 @@ export function DynamicTableComponent({
                         value={header}
                         onChange={e => updateHeader(colIndex, e.target.value)}
                         className="bg-transparent border-none outline-none focus:ring-1 focus:ring-blue-500 rounded px-1"
+                        aria-label={`Column header ${colIndex + 1}`}
                       />
                       <div className="flex items-center gap-1">
                         <button
@@ -137,6 +137,7 @@ export function DynamicTableComponent({
                         value={cell}
                         onChange={e => updateCell(rowIndex, colIndex, e.target.value)}
                         className="w-full border border-gray-300 rounded px-2 py-1 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                        aria-label={`Row ${rowIndex + 1}, Column ${colIndex + 1}`}
                       />
                     </td>
                   ))}
