@@ -36,7 +36,7 @@ describe('Export Service', () => {
 
     it('should handle unsupported format', async () => {
       const result = await ExportService.exportDocument(mockDocument, {
-        format: 'invalid' as any,
+        format: 'invalid' as unknown as 'json' | 'markdown' | 'pdf' | 'html',
         includeMetadata: false,
       });
       
