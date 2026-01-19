@@ -288,7 +288,7 @@ const EMOJI_SHORTCUTS: Record<string, string> = {
   playa: "🏖️",
   ocean: "🌊",
   oceano: "🌊",
-  wave: "🌊",
+  waves: "🌊",
   ola: "🌊",
   earth: "🌍",
   tierra: "🌍",
@@ -304,7 +304,7 @@ const EMOJI_SHORTCUTS: Record<string, string> = {
   tablet: "📱",
   keyboard: "⌨️",
   teclado: "⌨️",
-  mouse: "🖱️",
+  cursor: "🖱️",
   printer: "🖨️",
   impresora: "🖨️",
   camera: "📷",
@@ -589,7 +589,7 @@ const EMOJI_SHORTCUTS: Record<string, string> = {
   back: "🔙",
   end: "🔚",
   on: "🔛",
-  cool: "🆒",
+  genial: "🆒",
   sos: "🆘",
   up: "⬆️",
   down: "⬇️",
@@ -599,7 +599,6 @@ const EMOJI_SHORTCUTS: Record<string, string> = {
   reciclar: "♻️",
   infinity: "♾️",
   infinito: "♾️",
-};
 };
 
 const EMOJI_KEYWORDS = new Set(Object.keys(EMOJI_SHORTCUTS));
