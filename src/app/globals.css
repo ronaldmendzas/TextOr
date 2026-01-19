@@ -126,7 +126,7 @@ body {
   }
 
   .slash-menu-item.selected {
-    @apply bg-editor-accent/10 text-editor-accent;
+    @apply bg-indigo-50 text-editor-accent;
   }
 
   .floating-toolbar {
@@ -141,7 +141,7 @@ body {
   }
 
   .toolbar-button.active {
-    @apply bg-editor-accent/10 text-editor-accent;
+    @apply bg-indigo-50 text-editor-accent;
   }
 
   .callout {
