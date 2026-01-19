@@ -166,10 +166,10 @@ const EMOJI_SHORTCUTS: Record<string, string> = {
 };
 
 export function replaceEmojiShortcuts(text: string): string {
-  const pattern = /:(\w+)([.,!?;:\s]|$)/g;
+  const pattern = /\b(\w+)([.,!?;:])(?=\s|$)/g;
   
-  return text.replace(pattern, (match, shortcut, punctuation) => {
-    const emoji = EMOJI_SHORTCUTS[shortcut.toLowerCase()];
+  return text.replace(pattern, (match, word, punctuation) => {
+    const emoji = EMOJI_SHORTCUTS[word.toLowerCase()];
     if (emoji) {
       return emoji + punctuation;
     }
