@@ -1,0 +1,253 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+
+  --editor-bg: #ffffff;
+  --editor-text: #1a1a2e;
+  --editor-muted: #6b7280;
+  --editor-border: #e5e7eb;
+  --editor-accent: #3b82f6;
+  --editor-hover: #f3f4f6;
+
+  --callout-info-bg: #eff6ff;
+  --callout-info-border: #3b82f6;
+  --callout-info-text: #1e40af;
+
+  --callout-warning-bg: #fffbeb;
+  --callout-warning-border: #f59e0b;
+  --callout-warning-text: #b45309;
+
+  --callout-tip-bg: #f0fdf4;
+  --callout-tip-border: #22c55e;
+  --callout-tip-text: #166534;
+
+  --callout-danger-bg: #fef2f2;
+  --callout-danger-border: #ef4444;
+  --callout-danger-text: #b91c1c;
+}
+
+.dark {
+  --editor-bg: #0f0f23;
+  --editor-text: #e4e4e7;
+  --editor-muted: #a1a1aa;
+  --editor-border: #27272a;
+  --editor-accent: #60a5fa;
+  --editor-hover: #18181b;
+
+  --callout-info-bg: #1e3a5f;
+  --callout-info-border: #60a5fa;
+  --callout-info-text: #bfdbfe;
+
+  --callout-warning-bg: #451a03;
+  --callout-warning-border: #fbbf24;
+  --callout-warning-text: #fde68a;
+
+  --callout-tip-bg: #14532d;
+  --callout-tip-border: #4ade80;
+  --callout-tip-text: #bbf7d0;
+
+  --callout-danger-bg: #450a0a;
+  --callout-danger-border: #f87171;
+  --callout-danger-text: #fecaca;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--editor-bg);
+  color: var(--editor-text);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: rgba(59, 130, 246, 0.3);
+}
+
+.focus-mode-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+  z-index: 40;
+  transition: opacity 0.3s ease;
+}
+
+.focus-mode-active .editor-block:not(.focused) {
+  opacity: 0.3;
+  filter: blur(1px);
+  transition: all 0.3s ease;
+}
+
+.focus-mode-active .editor-block.focused {
+  position: relative;
+  z-index: 50;
+  opacity: 1;
+  filter: none;
+}
+
+@layer components {
+  .editor-container {
+    @apply mx-auto max-w-4xl px-4 py-8;
+  }
+
+  .editor-block {
+    @apply relative mb-2 rounded-lg transition-all duration-200;
+  }
+
+  .editor-block:hover {
+    @apply bg-editor-hover;
+  }
+
+  .slash-menu {
+    @apply absolute z-50 w-72 rounded-lg border border-editor-border bg-editor-bg p-2 shadow-xl;
+    @apply animate-slide-up;
+  }
+
+  .slash-menu-item {
+    @apply flex cursor-pointer items-center gap-3 rounded-md px-3 py-2 text-sm;
+    @apply hover:bg-editor-hover;
+  }
+
+  .slash-menu-item.selected {
+    @apply bg-editor-accent/10 text-editor-accent;
+  }
+
+  .floating-toolbar {
+    @apply absolute z-50 flex items-center gap-1 rounded-lg border border-editor-border bg-editor-bg p-1 shadow-lg;
+    @apply animate-fade-in;
+  }
+
+  .toolbar-button {
+    @apply flex h-8 w-8 items-center justify-center rounded-md text-editor-muted;
+    @apply hover:bg-editor-hover hover:text-editor-text;
+    @apply transition-colors duration-150;
+  }
+
+  .toolbar-button.active {
+    @apply bg-editor-accent/10 text-editor-accent;
+  }
+
+  .callout {
+    @apply my-4 rounded-lg border-l-4 p-4;
+  }
+
+  .callout-info {
+    @apply border-callout-info-border bg-callout-info-bg text-callout-info-text;
+  }
+
+  .callout-warning {
+    @apply border-callout-warning-border bg-callout-warning-bg text-callout-warning-text;
+  }
+
+  .callout-tip {
+    @apply border-callout-tip-border bg-callout-tip-bg text-callout-tip-text;
+  }
+
+  .callout-danger {
+    @apply border-callout-danger-border bg-callout-danger-bg text-callout-danger-text;
+  }
+
+  .code-block {
+    @apply my-4 overflow-hidden rounded-lg border border-editor-border;
+  }
+
+  .code-block-header {
+    @apply flex items-center justify-between border-b border-editor-border bg-editor-hover px-4 py-2;
+  }
+
+  .code-block-output {
+    @apply border-t border-editor-border bg-gray-900 p-4 text-sm text-green-400;
+  }
+
+  .dynamic-table {
+    @apply my-4 w-full overflow-hidden rounded-lg border border-editor-border;
+  }
+
+  .dynamic-table th {
+    @apply cursor-pointer border-b border-editor-border bg-editor-hover px-4 py-2 text-left text-sm font-medium;
+    @apply hover:bg-editor-border;
+  }
+
+  .dynamic-table td {
+    @apply border-b border-editor-border px-4 py-2 text-sm;
+  }
+
+  .embed-container {
+    @apply my-4 overflow-hidden rounded-lg border border-editor-border;
+  }
+
+  .embed-placeholder {
+    @apply flex items-center justify-between bg-editor-hover p-4;
+  }
+
+  .reading-stats {
+    @apply fixed bottom-4 right-4 rounded-lg border border-editor-border bg-editor-bg px-4 py-2 text-sm shadow-lg;
+  }
+
+  .word-density-panel {
+    @apply fixed right-0 top-0 h-full w-80 border-l border-editor-border bg-editor-bg p-4 shadow-xl;
+    @apply transform transition-transform duration-300;
+  }
+
+  .word-density-panel.collapsed {
+    @apply translate-x-full;
+  }
+
+  .emoji-picker {
+    @apply absolute z-50 rounded-lg border border-editor-border bg-editor-bg p-2 shadow-xl;
+  }
+
+  .save-indicator {
+    @apply fixed left-4 top-4 flex items-center gap-2 rounded-full px-3 py-1 text-xs;
+    @apply animate-fade-in;
+  }
+
+  .save-indicator.saving {
+    @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200;
+  }
+
+  .save-indicator.saved {
+    @apply bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: var(--editor-border);
+    border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: var(--editor-muted);
+  }
+}

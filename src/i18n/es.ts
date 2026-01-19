@@ -1,0 +1,108 @@
+import type { TranslationKeys } from "./en";
+
+export const es: TranslationKeys = {
+  editor: {
+    beta: "Beta",
+    untitled: "Documento sin título",
+    placeholder: "Escribe '/' para comandos o empieza a escribir...",
+  },
+  toolbar: {
+    undo: "Deshacer",
+    redo: "Rehacer",
+    bold: "Negrita",
+    italic: "Cursiva",
+    underline: "Subrayado",
+    strikethrough: "Tachado",
+    code: "Código",
+    link: "Enlace",
+    focusMode: "Modo Enfoque",
+    wordDensity: "Densidad de Palabras",
+  },
+  slashMenu: {
+    title: "Agregar Bloque",
+    noResults: "No se encontraron resultados",
+    commands: {
+      paragraph: { label: "Párrafo", description: "Texto plano" },
+      heading1: { label: "Título 1", description: "Encabezado grande" },
+      heading2: { label: "Título 2", description: "Encabezado mediano" },
+      heading3: { label: "Título 3", description: "Encabezado pequeño" },
+      code: { label: "Bloque de Código", description: "Código con resaltado de sintaxis" },
+      table: { label: "Tabla", description: "Tabla ordenable dinámica" },
+      calloutInfo: { label: "Aviso Info", description: "Aviso informativo" },
+      calloutWarning: { label: "Aviso Advertencia", description: "Aviso de advertencia" },
+      calloutTip: { label: "Aviso Consejo", description: "Consejo útil" },
+      calloutDanger: { label: "Aviso Peligro", description: "Advertencia crítica" },
+      quote: { label: "Cita", description: "Cita en bloque" },
+      bulletList: { label: "Lista con Viñetas", description: "Lista desordenada" },
+      numberedList: { label: "Lista Numerada", description: "Lista ordenada" },
+      checkboxList: { label: "Lista de Tareas", description: "Lista con casillas de verificación" },
+      divider: { label: "Divisor", description: "Separador visual" },
+      embed: { label: "Embed", description: "YouTube, Spotify, Twitter" },
+    },
+  },
+  blocks: {
+    code: {
+      run: "Ejecutar",
+      running: "Ejecutando...",
+      output: "Salida",
+      language: "Lenguaje",
+    },
+    table: {
+      addColumn: "Agregar Columna",
+      addRow: "Agregar Fila",
+      deleteColumn: "Eliminar Columna",
+      deleteRow: "Eliminar Fila",
+    },
+    callout: {
+      info: "Info",
+      warning: "Advertencia",
+      tip: "Consejo",
+      danger: "Peligro",
+    },
+    embed: {
+      embedPrompt: "¿Deseas incrustar este contenido?",
+      yes: "Sí, incrustar",
+      no: "No, mantener enlace",
+      loading: "Cargando embed...",
+    },
+  },
+  stats: {
+    words: "palabras",
+    characters: "caracteres",
+    sentences: "oraciones",
+    paragraphs: "párrafos",
+    readingTime: "min de lectura",
+    wordCount: "Contador de palabras",
+    sentiment: "Sentimiento",
+  },
+  save: {
+    saved: "Guardado",
+    saving: "Guardando...",
+  },
+  wordDensity: {
+    title: "Densidad de Palabras",
+    sentiment: "Sentimiento",
+    topWords: "Palabras Frecuentes",
+  },
+  common: {
+    save: "Guardado",
+  },
+  export: {
+    title: "Exportar",
+    pdf: "Exportar a PDF",
+    markdown: "Exportar a Markdown",
+    json: "Exportar a JSON",
+    html: "Copiar como HTML",
+    copied: "¡Copiado al portapapeles!",
+  },
+  language: {
+    en: "Inglés",
+    es: "Español",
+  },
+  actions: {
+    delete: "Eliminar",
+    duplicate: "Duplicar",
+    moveUp: "Mover Arriba",
+    moveDown: "Mover Abajo",
+  },
+};
