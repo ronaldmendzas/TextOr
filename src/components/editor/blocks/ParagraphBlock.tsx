@@ -4,7 +4,10 @@ import { useRef, useEffect, useCallback } from "react";
 import { useEditorStore } from "@/stores";
 import { useI18n } from "@/hooks";
 import type { Block } from "@/types";
-import { resolveDynamicVariables, processInlineCalculation } from "@/lib";
+import { resolveDynamicVariables, processInlineCalculation, autocorrectText } from "@/lib";
+
+const PUNCTUATION_TRIGGERS = [".", ",", "!", "?", ";", ":"];
+const MIN_TEXT_LENGTH = 8;
 
 interface ParagraphBlockProps {
   block: Block<"paragraph">;
@@ -13,6 +16,8 @@ interface ParagraphBlockProps {
 export function ParagraphBlock({ block }: ParagraphBlockProps) {
   const { t } = useI18n();
   const ref = useRef<HTMLDivElement>(null);
+  const isCorrectingRef = useRef(false);
+  const lastCorrectedTextRef = useRef("");
   const updateBlock = useEditorStore((state) => state.updateBlock);
   const openSlashMenu = useEditorStore((state) => state.openSlashMenu);
   const openEmojiPicker = useEditorStore((state) => state.openEmojiPicker);
@@ -21,6 +26,44 @@ export function ParagraphBlock({ block }: ParagraphBlockProps) {
   const focusedBlockId = useEditorStore((state) => state.editor.focusedBlockId);
 
   const currentText = block.data.content.map((s) => s.text).join("");
+
+  const performAutocorrect = useCallback(
+    async (text: string) => {
+      if (isCorrectingRef.current) return;
+      if (text.length < MIN_TEXT_LENGTH) return;
+      if (text === lastCorrectedTextRef.current) return;
+
+      isCorrectingRef.current = true;
+
+      try {
+        const result = await autocorrectText(text);
+
+        if (result.corrections.length > 0 && ref.current) {
+          lastCorrectedTextRef.current = result.correctedText;
+
+          const selection = window.getSelection();
+          const cursorAtEnd = selection?.focusOffset === ref.current.textContent?.length;
+
+          ref.current.textContent = result.correctedText;
+
+          updateBlock<"paragraph">(block.id, {
+            content: [{ text: result.correctedText }],
+          });
+
+          if (cursorAtEnd) {
+            const range = document.createRange();
+            range.selectNodeContents(ref.current);
+            range.collapse(false);
+            selection?.removeAllRanges();
+            selection?.addRange(range);
+          }
+        }
+      } finally {
+        isCorrectingRef.current = false;
+      }
+    },
+    [block.id, updateBlock]
+  );
 
   useEffect(() => {
     if (focusedBlockId === block.id && ref.current && !ref.current.textContent) {
@@ -47,8 +90,13 @@ export function ParagraphBlock({ block }: ParagraphBlockProps) {
       updateBlock<"paragraph">(block.id, {
         content: [{ text: processedText }],
       });
+
+      const lastChar = processedText.slice(-1);
+      if (PUNCTUATION_TRIGGERS.includes(lastChar)) {
+        performAutocorrect(processedText);
+      }
     },
-    [block.id, updateBlock]
+    [block.id, updateBlock, performAutocorrect]
   );
 
   const handleKeyDown = useCallback(
