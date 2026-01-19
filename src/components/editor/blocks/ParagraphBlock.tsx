@@ -21,6 +21,8 @@ export function ParagraphBlock({ block }: ParagraphBlockProps) {
   const updateBlock = useEditorStore((state) => state.updateBlock);
   const openSlashMenu = useEditorStore((state) => state.openSlashMenu);
   const openEmojiPicker = useEditorStore((state) => state.openEmojiPicker);
+  const updateEmojiPickerQuery = useEditorStore((state) => state.updateEmojiPickerQuery);
+  const emojiPickerOpen = useEditorStore((state) => state.emojiPicker.isOpen);
   const addBlock = useEditorStore((state) => state.addBlock);
   const pushToHistory = useEditorStore((state) => state.pushToHistory);
   const focusedBlockId = useEditorStore((state) => state.editor.focusedBlockId);
@@ -91,12 +93,19 @@ export function ParagraphBlock({ block }: ParagraphBlockProps) {
         content: [{ text: processedText }],
       });
 
+      if (emojiPickerOpen) {
+        const colonMatch = processedText.match(/:(\w*)$/);
+        if (colonMatch && colonMatch[1] !== undefined) {
+          updateEmojiPickerQuery(colonMatch[1]);
+        }
+      }
+
       const lastChar = processedText.slice(-1);
       if (PUNCTUATION_TRIGGERS.includes(lastChar)) {
         performAutocorrect(processedText);
       }
     },
-    [block.id, updateBlock, performAutocorrect]
+    [block.id, updateBlock, performAutocorrect, emojiPickerOpen, updateEmojiPickerQuery]
   );
 
   const handleKeyDown = useCallback(
