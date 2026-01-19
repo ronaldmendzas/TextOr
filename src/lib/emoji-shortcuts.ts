@@ -165,17 +165,26 @@ const EMOJI_SHORTCUTS: Record<string, string> = {
   dormir: "💤",
 };
 
+const EMOJI_KEYWORDS = new Set(Object.keys(EMOJI_SHORTCUTS));
+
 export function replaceEmojiShortcuts(text: string): string {
-  const pattern = /\b(\w+)([.,!?;:])/g;
+  if (!text.includes(".") && !text.includes(",") && !text.includes("!") && 
+      !text.includes("?") && !text.includes(";") && !text.includes(":")) {
+    return text;
+  }
+
+  let result = text;
   
-  return text.replace(pattern, (match, word, punctuation) => {
-    const lowerWord = word.toLowerCase();
-    if (lowerWord in EMOJI_SHORTCUTS) {
-      const emoji = EMOJI_SHORTCUTS[lowerWord];
-      return word + " " + emoji + punctuation;
-    }
-    return match;
-  });
+  for (const keyword of EMOJI_KEYWORDS) {
+    const emoji = EMOJI_SHORTCUTS[keyword];
+    const pattern = new RegExp(`\\b(${keyword})(?!\\s${emoji})\\b`, "gi");
+    
+    result = result.replace(pattern, (match) => {
+      return match + " " + emoji;
+    });
+  }
+  
+  return result;
 }
 
 export function getEmojiForShortcut(shortcut: string): string | null {

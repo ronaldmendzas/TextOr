@@ -39,17 +39,23 @@ export function ParagraphBlock({ block }: ParagraphBlockProps) {
 
       try {
         const result = await autocorrectText(text);
+        let finalText = result.correctedText;
+        
+        const withEmojis = replaceEmojiShortcuts(finalText);
+        if (withEmojis !== finalText) {
+          finalText = withEmojis;
+        }
 
-        if (result.corrections.length > 0 && ref.current) {
-          lastCorrectedTextRef.current = result.correctedText;
+        if (finalText !== text && ref.current) {
+          lastCorrectedTextRef.current = finalText;
 
           const selection = window.getSelection();
           const cursorAtEnd = selection?.focusOffset === ref.current.textContent?.length;
 
-          ref.current.textContent = result.correctedText;
+          ref.current.textContent = finalText;
 
           updateBlock<"paragraph">(block.id, {
-            content: [{ text: result.correctedText }],
+            content: [{ text: finalText }],
           });
 
           if (cursorAtEnd) {
