@@ -171,7 +171,7 @@ export function replaceEmojiShortcuts(text: string): string {
   return text.replace(pattern, (match, word, punctuation) => {
     const emoji = EMOJI_SHORTCUTS[word.toLowerCase()];
     if (emoji) {
-      return emoji + punctuation;
+      return word + " " + emoji + punctuation;
     }
     return match;
   });
