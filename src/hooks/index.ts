@@ -3,3 +3,4 @@ export { useAutoSave } from "./useAutoSave";
 export { useKeyboardShortcuts } from "./useKeyboardShortcuts";
 export { useTextAnalysis } from "./useTextAnalysis";
 export { useCalculator } from "./useCalculator";
+export { useAIAssistant } from "./useAIAssistant";

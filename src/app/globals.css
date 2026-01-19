@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+[contenteditable]:empty:before {
+  content: attr(data-placeholder);
+  color: var(--editor-muted);
+  pointer-events: none;
+}
+
 :root {
   --font-sans: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", "Fira Code", monospace;

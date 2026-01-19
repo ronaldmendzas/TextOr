@@ -103,6 +103,15 @@ export interface TranslationKeys {
     moveUp: string;
     moveDown: string;
   };
+  ai: {
+    suggestions: string;
+    noSuggestions: string;
+    correctionsFound: string;
+    applyAll: string;
+    autocorrecting: string;
+    detectedLanguage: string;
+    pressTab: string;
+  };
 }
 
 export const en: TranslationKeys = {
@@ -209,5 +218,14 @@ export const en: TranslationKeys = {
     duplicate: "Duplicate",
     moveUp: "Move Up",
     moveDown: "Move Down",
+  },
+  ai: {
+    suggestions: "AI Suggestions",
+    noSuggestions: "No suggestions available",
+    correctionsFound: "Corrections Found",
+    applyAll: "Apply All",
+    autocorrecting: "Checking spelling...",
+    detectedLanguage: "Detected Language",
+    pressTab: "Press Tab to accept",
   },
 };

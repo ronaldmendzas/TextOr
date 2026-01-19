@@ -4,6 +4,8 @@ import { useEditorStore } from "@/stores";
 import { useI18n } from "@/hooks";
 import { Button } from "@/components/ui";
 import { cn } from "@/lib";
+import { autocorrectText } from "@/lib/ai-service";
+import { useState } from "react";
 import {
   Undo2,
   Redo2,
@@ -15,10 +17,15 @@ import {
   Link,
   Focus,
   BarChart3,
+  Sparkles,
+  Loader2,
 } from "lucide-react";
 
 export function Toolbar() {
   const { t } = useI18n();
+  const [isAIProcessing, setIsAIProcessing] = useState(false);
+  const document = useEditorStore((state) => state.document);
+  const updateBlock = useEditorStore((state) => state.updateBlock);
   const undo = useEditorStore((state) => state.undo);
   const redo = useEditorStore((state) => state.redo);
   const canUndo = useEditorStore((state) => state.canUndo);
@@ -31,6 +38,28 @@ export function Toolbar() {
   const wordDensityPanelOpen = useEditorStore(
     (state) => state.wordDensityPanelOpen
   );
+
+  const handleAIAutocorrect = async () => {
+    setIsAIProcessing(true);
+    try {
+      for (const block of document.blocks) {
+        if (block.type === "paragraph") {
+          const paragraphBlock = block as { id: string; type: "paragraph"; data: { content: { text: string }[] } };
+          const text = paragraphBlock.data.content.map((s) => s.text).join("");
+          if (text.length > 5) {
+            const result = await autocorrectText(text);
+            if (result.corrections.length > 0) {
+              updateBlock<"paragraph">(block.id, {
+                content: [{ text: result.correctedText }],
+              });
+            }
+          }
+        }
+      }
+    } finally {
+      setIsAIProcessing(false);
+    }
+  };
 
   const toolbarButtons = [
     {
@@ -79,6 +108,14 @@ export function Toolbar() {
       label: t.toolbar.wordDensity,
       action: toggleWordDensityPanel,
       active: wordDensityPanelOpen,
+    },
+    { type: "separator" as const },
+    {
+      icon: isAIProcessing ? Loader2 : Sparkles,
+      label: t.ai?.autocorrecting || "AI Autocorrect",
+      action: handleAIAutocorrect,
+      disabled: isAIProcessing,
+      className: isAIProcessing ? "animate-spin" : "",
     },
   ];
 

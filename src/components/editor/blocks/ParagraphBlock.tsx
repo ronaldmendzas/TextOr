@@ -101,6 +101,12 @@ export function ParagraphBlock({ block }: ParagraphBlockProps) {
     [block.id, openSlashMenu, openEmojiPicker, updateBlock, addBlock, pushToHistory]
   );
 
+  useEffect(() => {
+    if (ref.current && ref.current.textContent !== currentText) {
+      ref.current.textContent = currentText;
+    }
+  }, []);
+
   return (
     <div
       ref={ref}
@@ -112,15 +118,6 @@ export function ParagraphBlock({ block }: ParagraphBlockProps) {
       data-placeholder={t.editor.placeholder}
       role="textbox"
       aria-multiline="false"
-      style={{
-        position: "relative",
-      }}
-    >
-      {currentText || (
-        <span className="pointer-events-none absolute text-editor-muted">
-          {t.editor.placeholder}
-        </span>
-      )}
-    </div>
+    />
   );
 }

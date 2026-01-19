@@ -105,4 +105,13 @@ export const es: TranslationKeys = {
     moveUp: "Mover Arriba",
     moveDown: "Mover Abajo",
   },
+  ai: {
+    suggestions: "Sugerencias de IA",
+    noSuggestions: "Sin sugerencias disponibles",
+    correctionsFound: "Correcciones Encontradas",
+    applyAll: "Aplicar Todo",
+    autocorrecting: "Revisando ortografía...",
+    detectedLanguage: "Idioma Detectado",
+    pressTab: "Presiona Tab para aceptar",
+  },
 };

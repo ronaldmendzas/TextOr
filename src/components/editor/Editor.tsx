@@ -4,18 +4,42 @@ import { useEditorStore } from "@/stores";
 import { BlockRenderer } from "./BlockRenderer";
 import { SlashMenu } from "./SlashMenu";
 import { EmojiPicker } from "./EmojiPicker";
+import { AutocorrectPanel } from "./AutocorrectPanel";
+import { AIAssistantProvider, useAI } from "./AIAssistantProvider";
 import { cn } from "@/lib";
 
-export function Editor() {
+function EditorContent() {
   const document = useEditorStore((state) => state.document);
   const focusMode = useEditorStore((state) => state.focusMode);
   const addBlock = useEditorStore((state) => state.addBlock);
+  const updateBlock = useEditorStore((state) => state.updateBlock);
+
+  const {
+    autocorrectResult,
+    showCorrections,
+    applyCorrections,
+    dismissCorrections,
+  } = useAI();
 
   const handleEditorClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       const lastBlock = document.blocks[document.blocks.length - 1];
       if (lastBlock && lastBlock.type !== "paragraph") {
         addBlock("paragraph");
+      }
+    }
+  };
+
+  const handleApplyCorrections = () => {
+    const correctedText = applyCorrections();
+    if (correctedText) {
+      const focusedBlock = document.blocks.find(
+        (b) => b.type === "paragraph"
+      );
+      if (focusedBlock) {
+        updateBlock<"paragraph">(focusedBlock.id, {
+          content: [{ text: correctedText }],
+        });
       }
     }
   };
@@ -47,6 +71,20 @@ export function Editor() {
 
       <SlashMenu />
       <EmojiPicker />
+      <AutocorrectPanel
+        result={autocorrectResult}
+        isVisible={showCorrections}
+        onApply={handleApplyCorrections}
+        onDismiss={dismissCorrections}
+      />
     </div>
+  );
+}
+
+export function Editor() {
+  return (
+    <AIAssistantProvider>
+      <EditorContent />
+    </AIAssistantProvider>
   );
 }
