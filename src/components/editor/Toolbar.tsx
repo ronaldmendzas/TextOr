@@ -5,7 +5,7 @@ import { useI18n } from "@/hooks";
 import { Button } from "@/components/ui";
 import { cn } from "@/lib";
 import { autocorrectText } from "@/lib/ai-service";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import {
   Undo2,
   Redo2,
@@ -20,6 +20,10 @@ import {
   Sparkles,
   Loader2,
 } from "lucide-react";
+
+function applyFormat(command: string, value?: string) {
+  document.execCommand(command, false, value);
+}
 
 export function Toolbar() {
   const { t } = useI18n();
@@ -38,6 +42,38 @@ export function Toolbar() {
   const wordDensityPanelOpen = useEditorStore(
     (state) => state.wordDensityPanelOpen
   );
+
+  const handleBold = useCallback(() => applyFormat("bold"), []);
+  const handleItalic = useCallback(() => applyFormat("italic"), []);
+  const handleUnderline = useCallback(() => applyFormat("underline"), []);
+  const handleStrikethrough = useCallback(() => applyFormat("strikeThrough"), []);
+  const handleCode = useCallback(() => {
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0);
+      const selectedText = range.toString();
+      if (selectedText) {
+        const code = window.document.createElement("code");
+        code.className = "bg-editor-surface px-1 py-0.5 rounded text-sm font-mono";
+        code.textContent = selectedText;
+        range.deleteContents();
+        range.insertNode(code);
+      }
+    }
+  }, []);
+  
+  const handleLink = useCallback(() => {
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      const selectedText = selection.toString();
+      if (selectedText) {
+        const url = prompt("Enter URL:", "https://");
+        if (url) {
+          applyFormat("createLink", url);
+        }
+      }
+    }
+  }, []);
 
   const handleAIAutocorrect = async () => {
     setIsAIProcessing(true);
@@ -75,27 +111,27 @@ export function Toolbar() {
       disabled: !canRedo(),
     },
     { type: "separator" as const },
-    { icon: Bold, label: t.toolbar.bold, action: () => {}, shortcut: "Ctrl+B" },
+    { icon: Bold, label: t.toolbar.bold, action: handleBold, shortcut: "Ctrl+B" },
     {
       icon: Italic,
       label: t.toolbar.italic,
-      action: () => {},
+      action: handleItalic,
       shortcut: "Ctrl+I",
     },
     {
       icon: Underline,
       label: t.toolbar.underline,
-      action: () => {},
+      action: handleUnderline,
       shortcut: "Ctrl+U",
     },
     {
       icon: Strikethrough,
       label: t.toolbar.strikethrough,
-      action: () => {},
+      action: handleStrikethrough,
     },
     { type: "separator" as const },
-    { icon: Code, label: t.toolbar.code, action: () => {} },
-    { icon: Link, label: t.toolbar.link, action: () => {} },
+    { icon: Code, label: t.toolbar.code, action: handleCode },
+    { icon: Link, label: t.toolbar.link, action: handleLink },
     { type: "separator" as const },
     {
       icon: Focus,
