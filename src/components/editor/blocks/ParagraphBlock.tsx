@@ -7,7 +7,7 @@ import type { Block } from "@/types";
 import { resolveDynamicVariables, processInlineCalculation, autocorrectText, replaceEmojiShortcuts } from "@/lib";
 
 const PUNCTUATION_TRIGGERS = [".", ",", "!", "?", ";", ":"];
-const MIN_TEXT_LENGTH = 8;
+const MIN_TEXT_LENGTH = 3;
 
 interface ParagraphBlockProps {
   block: Block<"paragraph">;
