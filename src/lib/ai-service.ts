@@ -48,18 +48,31 @@ export async function autocorrectText(text: string): Promise<AutocorrectResult> 
         const original = text.substring(match.offset, match.offset + match.length);
         
         const isLowerCase = original === original.toLowerCase();
+        const isUpperCase = original === original.toUpperCase() && original.length > 1;
         let replacement = "";
         
         for (const rep of match.replacements) {
           const repValue = rep.value;
           const isRepAllCaps = repValue === repValue.toUpperCase() && repValue.length > 1;
+          const isRepLowerCase = repValue === repValue.toLowerCase();
           
           if (isLowerCase && isRepAllCaps) {
             continue;
           }
           
-          replacement = repValue;
-          break;
+          if (isLowerCase && isRepLowerCase) {
+            replacement = repValue;
+            break;
+          }
+          
+          if (isUpperCase && isRepAllCaps) {
+            replacement = repValue;
+            break;
+          }
+          
+          if (!replacement) {
+            replacement = repValue;
+          }
         }
         
         if (!replacement) {
