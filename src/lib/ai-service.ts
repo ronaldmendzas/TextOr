@@ -1,18 +1,3 @@
-import OpenAI from "openai";
-
-let openaiClient: OpenAI | null = null;
-
-function getClient(): OpenAI {
-  if (!openaiClient) {
-    const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY || "";
-    openaiClient = new OpenAI({
-      apiKey,
-      dangerouslyAllowBrowser: true,
-    });
-  }
-  return openaiClient;
-}
-
 export interface AutocorrectResult {
   correctedText: string;
   detectedLanguage: string;
@@ -29,8 +14,6 @@ export interface AutocompleteResult {
 }
 
 export async function autocorrectText(text: string): Promise<AutocorrectResult> {
-  const client = getClient();
-
   if (!text.trim() || text.length < 3) {
     return {
       correctedText: text,
@@ -40,44 +23,50 @@ export async function autocorrectText(text: string): Promise<AutocorrectResult> 
   }
 
   try {
-    const response = await client.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content: `You are a spelling and grammar correction assistant. 
-Analyze the text, detect its language, and correct any spelling or grammar errors.
-Respond ONLY with a JSON object in this exact format:
-{
-  "correctedText": "the corrected text",
-  "detectedLanguage": "en" or "es" or other ISO code,
-  "corrections": [
-    {"original": "wrong word", "corrected": "right word", "reason": "brief explanation"}
-  ]
-}
-If text is correct, return corrections as empty array.
-Preserve the original meaning and style. Only fix actual errors.`,
-        },
-        {
-          role: "user",
-          content: text,
-        },
-      ],
-      temperature: 0.1,
-      max_tokens: 1000,
+    const response = await fetch("https://api.languagetool.org/v2/check", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        text: text,
+        language: "auto",
+      }),
     });
 
-    const content = response.choices[0]?.message?.content || "";
-    const jsonMatch = content.match(/\{[\s\S]*\}/);
-
-    if (jsonMatch) {
-      return JSON.parse(jsonMatch[0]) as AutocorrectResult;
+    if (!response.ok) {
+      throw new Error("LanguageTool API error");
     }
 
+    const data = await response.json();
+    const corrections: Array<{ original: string; corrected: string; reason: string }> = [];
+    let correctedText = text;
+    let offset = 0;
+
+    for (const match of data.matches || []) {
+      if (match.replacements && match.replacements.length > 0) {
+        const original = text.substring(match.offset, match.offset + match.length);
+        const replacement = match.replacements[0].value;
+
+        corrections.push({
+          original,
+          corrected: replacement,
+          reason: match.shortMessage || match.message || "Spelling",
+        });
+
+        const start = match.offset + offset;
+        const end = start + match.length;
+        correctedText = correctedText.substring(0, start) + replacement + correctedText.substring(end);
+        offset += replacement.length - match.length;
+      }
+    }
+
+    const detectedLang = data.language?.detectedLanguage?.code || "en";
+
     return {
-      correctedText: text,
-      detectedLanguage: "unknown",
-      corrections: [],
+      correctedText,
+      detectedLanguage: detectedLang.split("-")[0],
+      corrections,
     };
   } catch (error) {
     console.error("Autocorrect error:", error);
@@ -91,49 +80,9 @@ Preserve the original meaning and style. Only fix actual errors.`,
 
 export async function getAutocompleteSuggestions(
   text: string,
-  cursorContext: string
+  _cursorContext: string
 ): Promise<AutocompleteResult> {
-  const client = getClient();
-
-  if (!text.trim() || text.length < 5) {
-    return { suggestions: [], context: "" };
-  }
-
-  try {
-    const response = await client.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content: `You are an intelligent writing assistant. Based on the text provided, suggest 3 possible completions for the current sentence or thought.
-Respond ONLY with a JSON object:
-{
-  "suggestions": ["completion 1", "completion 2", "completion 3"],
-  "context": "brief context detected"
-}
-Keep suggestions short (5-15 words max each). Match the language and tone of the input.`,
-        },
-        {
-          role: "user",
-          content: `Text so far: "${text}"\nCursor position context: "${cursorContext}"`,
-        },
-      ],
-      temperature: 0.7,
-      max_tokens: 300,
-    });
-
-    const content = response.choices[0]?.message?.content || "";
-    const jsonMatch = content.match(/\{[\s\S]*\}/);
-
-    if (jsonMatch) {
-      return JSON.parse(jsonMatch[0]) as AutocompleteResult;
-    }
-
-    return { suggestions: [], context: "" };
-  } catch (error) {
-    console.error("Autocomplete error:", error);
-    return { suggestions: [], context: "" };
-  }
+  return { suggestions: [], context: text };
 }
 
 export async function detectLanguage(text: string): Promise<string> {
