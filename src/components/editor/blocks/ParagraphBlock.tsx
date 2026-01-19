@@ -4,7 +4,7 @@ import { useRef, useEffect, useCallback } from "react";
 import { useEditorStore } from "@/stores";
 import { useI18n } from "@/hooks";
 import type { Block } from "@/types";
-import { resolveDynamicVariables, processInlineCalculation, autocorrectText } from "@/lib";
+import { resolveDynamicVariables, processInlineCalculation, autocorrectText, replaceEmojiShortcuts } from "@/lib";
 
 const PUNCTUATION_TRIGGERS = [".", ",", "!", "?", ";", ":"];
 const MIN_TEXT_LENGTH = 8;
@@ -77,9 +77,23 @@ export function ParagraphBlock({ block }: ParagraphBlockProps) {
     (e: React.FormEvent<HTMLDivElement>) => {
       const text = e.currentTarget.textContent ?? "";
 
-      const processedText = resolveDynamicVariables(text);
+      let processedText = resolveDynamicVariables(text);
+      
+      const emojiProcessed = replaceEmojiShortcuts(processedText);
+      if (emojiProcessed !== processedText) {
+        processedText = emojiProcessed;
+        if (ref.current) {
+          ref.current.textContent = processedText;
+          const range = document.createRange();
+          const sel = window.getSelection();
+          range.selectNodeContents(ref.current);
+          range.collapse(false);
+          sel?.removeAllRanges();
+          sel?.addRange(range);
+        }
+      }
 
-      if (processedText !== text && ref.current) {
+      if (processedText !== text && ref.current && ref.current.textContent !== processedText) {
         ref.current.textContent = processedText;
         const range = document.createRange();
         const sel = window.getSelection();
