@@ -59,7 +59,7 @@ export function ToggleBlock({ block }: ToggleBlockProps) {
     <div
       className={cn(
         "toggle-block rounded-lg border border-editor-border",
-        "bg-editor-sidebar transition-all"
+        "bg-editor-hover transition-all"
       )}
     >
       <div

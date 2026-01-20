@@ -282,7 +282,7 @@ export function FindReplace() {
             onChange={(e) => setFindQuery(e.target.value)}
             placeholder="Find..."
             className={cn(
-              "flex-1 rounded border border-editor-border bg-editor-sidebar px-2 py-1.5 text-sm",
+              "flex-1 rounded border border-editor-border bg-editor-hover px-2 py-1.5 text-sm",
               "focus:border-editor-accent focus:outline-none focus:ring-1 focus:ring-editor-accent"
             )}
           />
@@ -315,7 +315,7 @@ export function FindReplace() {
             onChange={(e) => setReplaceQuery(e.target.value)}
             placeholder="Replace with..."
             className={cn(
-              "w-full rounded border border-editor-border bg-editor-sidebar px-2 py-1.5 text-sm",
+              "w-full rounded border border-editor-border bg-editor-hover px-2 py-1.5 text-sm",
               "focus:border-editor-accent focus:outline-none focus:ring-1 focus:ring-editor-accent"
             )}
           />

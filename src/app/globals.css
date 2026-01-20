@@ -270,7 +270,7 @@ body {
 }
 
 .checklist-block {
-  @apply my-4 rounded-lg border border-editor-border bg-editor-sidebar p-4;
+  @apply my-4 rounded-lg border border-editor-border bg-editor-hover p-4;
 }
 
 .toggle-block {
