@@ -23,6 +23,7 @@ import {
   CheckSquare,
   Minus,
   Video,
+  ChevronRight,
 } from "lucide-react";
 
 export function SlashMenu() {
@@ -166,6 +167,14 @@ export function SlashMenu() {
         keywords: ["embed", "youtube", "video", "spotify", "twitter", "insertar"],
         blockType: "embed",
       },
+      {
+        id: "toggle",
+        label: "Toggle",
+        description: "Collapsible section",
+        icon: "ChevronRight",
+        keywords: ["toggle", "collapse", "expand", "accordion", "colapsar"],
+        blockType: "callout",
+      },
     ],
     [t]
   );
@@ -188,6 +197,7 @@ export function SlashMenu() {
       CheckSquare,
       Minus,
       Video,
+      ChevronRight,
     };
     const Icon = icons[iconName];
     return Icon ? <Icon className="h-5 w-5" /> : null;

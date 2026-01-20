@@ -1,10 +1,12 @@
 "use client";
 
 import { useEditorStore } from "@/stores";
+import { useEditorShortcuts } from "@/hooks";
 import { BlockRenderer } from "./BlockRenderer";
 import { SlashMenu } from "./SlashMenu";
 import { EmojiPicker } from "./EmojiPicker";
 import { AutocorrectPanel } from "./AutocorrectPanel";
+import { FindReplace } from "./FindReplace";
 import { AIAssistantProvider, useAI } from "./AIAssistantProvider";
 import { cn } from "@/lib";
 
@@ -13,6 +15,8 @@ function EditorContent() {
   const focusMode = useEditorStore((state) => state.focusMode);
   const addBlock = useEditorStore((state) => state.addBlock);
   const updateBlock = useEditorStore((state) => state.updateBlock);
+
+  useEditorShortcuts();
 
   const {
     autocorrectResult,
@@ -71,6 +75,7 @@ function EditorContent() {
 
       <SlashMenu />
       <EmojiPicker />
+      <FindReplace />
       <AutocorrectPanel
         result={autocorrectResult}
         isVisible={showCorrections}
