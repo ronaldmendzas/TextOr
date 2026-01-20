@@ -257,3 +257,22 @@ body {
     background: var(--editor-muted);
   }
 }
+
+.textor-find-highlight {
+  background: rgba(255, 213, 0, 0.4);
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+.textor-find-current {
+  background: rgba(255, 165, 0, 0.6);
+  outline: 2px solid rgb(255, 165, 0);
+}
+
+.checklist-block {
+  @apply my-4 rounded-lg border border-editor-border bg-editor-hover p-4;
+}
+
+.toggle-block {
+  @apply my-4;
+}

@@ -8,4 +8,5 @@ export { ReadingStats } from "./ReadingStats";
 export { WordDensityPanel } from "./WordDensityPanel";
 export { SaveIndicator } from "./SaveIndicator";
 export { ExportMenu } from "./ExportMenu";
+export { FindReplace } from "./FindReplace";
 export * from "./blocks";

@@ -4,3 +4,4 @@ export { useKeyboardShortcuts } from "./useKeyboardShortcuts";
 export { useTextAnalysis } from "./useTextAnalysis";
 export { useCalculator } from "./useCalculator";
 export { useAIAssistant } from "./useAIAssistant";
+export { useEditorShortcuts } from "./useEditorShortcuts";

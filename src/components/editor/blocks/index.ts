@@ -8,3 +8,5 @@ export { EmbedBlock } from "./EmbedBlock";
 export { DividerBlock } from "./DividerBlock";
 export { QuoteBlock } from "./QuoteBlock";
 export { ListBlock } from "./ListBlock";
+export { ChecklistBlock } from "./ChecklistBlock";
+export { ToggleBlock } from "./ToggleBlock";
